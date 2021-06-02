@@ -1,75 +1,74 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './Home.css';
-import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { Props } from './Home.props'
+import { Card } from '../../components/Card/Card';
+import { MotionCard } from '../../components/MotionCard/MotionCard';
+import { useFetchData } from '../../hooks/useFetchData/useFetchData';
+import Loader from "react-loader-spinner";
+import { useFetchDataDetail } from '../../hooks/useFetchDataDetail';
+import { Header } from '../../components/Header';
+import Select from 'react-select'
 
+const options = [
+  { value: 'prime', label: 'Prime Video' },
+  { value: 'netflix', label: 'Netflix' },
+  { value: 'disney', label: 'Disney +' }
+]
 
+interface ParamTypes {
+  detailId: string
+}
  export const Home: React.FC<Props> = () =>  {
 
-  const [recipes, setRecipes] = useState<any[]>([])
+
   const [search, setSearch] = useState('')
+  const imageHasLoaded = true;
+  const {detailId} = useParams<ParamTypes>()
 
-  useEffect(() => {
+  const { data ,isLoading } = useFetchData(search)
+  const { data: dataDetail, isLoading: isLoadingDetail } = useFetchDataDetail(detailId)
 
-    fetch(`https://tasty.p.rapidapi.com/recipes/list`, {
-      "method" : "GET",
-      "headers": {
-        "x-rapidapi-key": "ad92e4ec72msh022b8f226039b70p1d095ajsn153c21f6105f",
-        "x-rapidapi-host": "tasty.p.rapidapi.com",
-        "useQueryString": "true"
-      }
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setRecipes(data?.results)
-    })
+  const currentDetailId = data?.find((movie) => movie.id === parseInt(detailId))
 
-  },[])
 
-  const linkList = recipes?.map((c) => {
-    return (
-      <li key={c?.id} id='container'>
-        <img src={c?.thumbnail_url} alt="ImgRecipe" className='img'/>
-        <Link to={`/details/${c?.id}`} className='link'>{c?.name}</Link>
-      </li>
-    );
+
+  const linkList = data?.map((movie) => {
+    return <Card item={movie} currenMotionId={currentDetailId?.id}/>
   });
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault()
-
-    fetch(`https://tasty.p.rapidapi.com/recipes/list?q=${search}`, {
-      "method" : "GET",
-      "headers": {
-        "x-rapidapi-key": "ad92e4ec72msh022b8f226039b70p1d095ajsn153c21f6105f",
-        "x-rapidapi-host": "tasty.p.rapidapi.com",
-        "useQueryString": "true"
-      }
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setRecipes(data?.results)
-    })
-
-    setSearch('')
-  }
-
+  
   return (
       <div className="App">
-        <form onSubmit={handleSubmit}>
-          <label>
-            Search :
-            <input type="text" value={search} onChange={event => setSearch(event.target.value)} />
-          </label>
-          <input type="submit" value="Envoyer" />
-        </form>
+      <Header currentRoute='movies'/>
 
-        {recipes?.length > 0 
-        ? 
-          <ul id='gallery'>{linkList}</ul>
-        :  
-        <div>Pas de recette</div>
+        <div id='containerTop'>
+          <div id='searchBar'>
+            <form>
+                <input id='inputSearchBar' type="text" value={search} placeholder='Seach movies...' onChange={event => setSearch(event.target.value)} />
+            </form>
+          </div>
+
+            <div id="selector"><Select options={options}  /></div>
+        </div>
+
+
+
+        {!isLoading ?
+
+          data?.length > 0 ? <div id='gallery'>{linkList} </div> : <div>Pas de recette</div>
+        :
+          <div id="loader">
+            <Loader  type="Puff" color="#D13F3F" height={100} width={100} />
+          </div>
         }
+            
+
+        <AnimatePresence >
+          {detailId !== undefined && imageHasLoaded && 
+            <MotionCard item={currentDetailId} itemDetail={dataDetail} loading={isLoadingDetail}/>}
+        </AnimatePresence>
       </div>
   );
 }

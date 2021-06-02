@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 215px;
+  padding: 8px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  color: #FFFFFF;
+  text-align: center;
+  margin: 0;
+}
+
+.img {
+  border-radius: 12px;
+  height: 290px;  
+}
+
+
+
+

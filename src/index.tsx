@@ -1,17 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import './index.css';
-import { Home, Detail } from './screens';
+import App from './screens/App';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Switch>
-      <Route exact path="/" component={Home} />
-      <Route path="/details/:detailId" component={Detail} />
-      <Redirect to="/" />
-    </Switch>
-  </BrowserRouter>,
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

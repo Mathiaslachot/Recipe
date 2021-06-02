@@ -12,3 +12,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.separatorH {
+  padding-right: 8px;
+  padding-left: 8px;
+}

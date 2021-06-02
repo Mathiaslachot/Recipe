@@ -1,0 +1,43 @@
+#header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#titleHeader {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 48px;
+  line-height: 71px;
+  display: flex;
+  align-items: center;
+  color: #D13F3F;
+}
+
+#navigationHeader {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 53px;
+  color: #666666;
+}
+
+#currentNavigationHeader {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 53px;
+  color: #FFFFFF;
+  padding-right: 8px;
+}
+
+.linkHeader {
+  text-decoration: none;
+}
+
+#containerNavigationHeader {
+  display: flex;
+  flex-direction: row;
+}
